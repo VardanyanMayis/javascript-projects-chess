@@ -24,9 +24,20 @@ body {
     background-color: saddlebrown;
 }
 
+.valid__box {
+    border-radius: 50px;
+    background-color: rgba(121, 121, 121, 0.575);
+    margin: 15px 15px;
+    width: 20px;
+    height: 20px;
+}
+
 img {
     margin: 0px 0px;
     width: 50px;
     height: 50px;
 }
 
+.choosed {
+    background-color: rgba(255, 255, 0, 0.479);
+}
