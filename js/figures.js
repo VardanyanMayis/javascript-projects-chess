@@ -55,6 +55,7 @@ class Figures {
 		newfigure.classList.add(`${this.color}`);
 		newfigure.src = `img/${this.color}/${imgFigure}.png`;
 		newBox.append(newfigure);
+		if(this.figure.dataset.figure === 'sol') this.chanjeSolder(newBox);
 	}
 
 	hit(box) {
@@ -75,15 +76,17 @@ class Figures {
 		newfigure.classList.add(`${this.color}`);
 		newfigure.src = `img/${this.color}/${imgFigure}.png`;
 		newBox.append(newfigure);
+		if(this.figure.dataset.figure === 'sol') this.chanjeSolder(newBox);
+
 	}
-	
 }
 
 
 // Solder
 export class SolderFigure extends Figures {
-	constructor(figure, color) {
+	constructor(figure, color, changeFunction) {
 		super(figure, color);
+		this.changeFunction = changeFunction;
 
 		this.row = +this.box.id[1];
 		this.grow = this.box.id[0];
@@ -91,7 +94,6 @@ export class SolderFigure extends Figures {
 		this.canTwoStep = (this.color === 'with' && this.row === 2) 
 			? true : (this.color === 'black' && this.row === 7) ? true
 				: false;
-
 	}
 
 	Steps(board) {
@@ -136,6 +138,23 @@ export class SolderFigure extends Figures {
 
 			return [this.steps, this.hitSteps];
 		}
+	}
+
+	chanjeSolder(newBox) {
+		if((this.row === 2 && this.color === 'black') || 
+			(this.row === 7 && this.color === 'with')) {
+			const newFigureProm = this.changeFunction(this.color);
+			newFigureProm.then(data => {
+				console.log('change');
+				const newfigure = document.createElement('img');
+				newfigure.dataset.figure = `${data}`;
+				newfigure.classList.add(`${this.color}`);
+				newfigure.src = `img/${this.color}/${data}.png`;
+				newBox.innerHTML = '';
+				newBox.append(newfigure);
+				// this.figure.parentElement.append(newfigure);
+			});
+		} 
 	}
 
 }

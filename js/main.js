@@ -2,6 +2,7 @@
 
 // import modules
 import {crateBoard, setBindFigures} from './board.js';
+import {ModalForNewFigure} from './solder_modal.js';
 import {SolderFigure} from './figures.js';
 
 
@@ -88,7 +89,7 @@ function getFigureType(box) {
 	if(getSteps != 0) return;
 
 	if(figure === 'sol') {
-		const solder = new SolderFigure(box, whoStep);
+		const solder = new SolderFigure(box, whoStep, ModalForNewFigure);
 		return solder;
 	}
 }

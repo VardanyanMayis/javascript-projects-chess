@@ -45,3 +45,77 @@ img {
 .hit__box {
     background-color: rgba(255, 0, 0, 0.432);
 }
+
+/* modal window */
+
+.modal{
+    position:fixed;
+    top:0;left:0;
+    z-index:1050;
+    /* display:none; */
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background-color:rgba(0,0,0,.5)}
+
+.modal__dialog{
+    max-width:500px;
+    margin:40px auto}
+
+.modal__content{
+    position:relative;
+    width:100%;
+    padding:40px;
+    background-color:#fff;
+    border:1px solid rgba(0,0,0,.2);
+    border-radius:4px;
+    max-height:80vh;
+    overflow-y:auto}
+
+/* .modal__close{
+    position:absolute;
+    top:8px;right:14px;
+    font-size:30px;
+    color:#000;
+    opacity:.5;
+    font-weight:700;
+    border:none;
+    background-color:transparent;
+    cursor:pointer} */
+
+.modal__title{
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-align:center;
+    font-size:35px;
+    text-transform:uppercase
+}
+
+.choose__figure__box {
+    display: flex;
+    justify-content:center;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.choose__figure {
+    margin: 10px 25px;
+}
+
+.choose__figure>img {
+    height: 60px;
+    width: 60px;
+}
+
+.choose__figure>img:hover {
+    background-color:rgba(116, 116, 116, 0.295);
+    height: 62px;
+    width: 62px;
+}
