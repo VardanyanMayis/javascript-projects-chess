@@ -3,7 +3,7 @@
 // import modules
 import {crateBoard, setBindFigures} from './board.js';
 import {ModalForNewFigure} from './solder_modal.js';
-import {SolderFigure, ShipFigure} from './figures.js';
+import {SolderFigure, ShipFigure, HorseFigure} from './figures.js';
 
 
 // set settings
@@ -93,6 +93,8 @@ function getFigureType(box) {
 		return new SolderFigure(box, whoStep, ModalForNewFigure);
 	} else if(figure === 'ship') {
 		return new ShipFigure(box, whoStep);
+	} else if(figure == 'horse') {
+		return new HorseFigure(box, whoStep);
 	}
 }
 

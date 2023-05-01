@@ -4,6 +4,7 @@
 class Figures {
 	constructor(figure, color) {
 		this.grows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+		this.rows = [1, 2, 3, 4, 5, 6, 7, 8];
 		this.figure = figure;
 		this.color = color;
 		this.box = figure.parentElement;
@@ -164,7 +165,6 @@ export class SolderFigure extends Figures {
 export class ShipFigure extends Figures {
 	constructor(figure, color) {
 		super(figure, color);
-		this.rows = [1, 2, 3, 4, 5, 6, 7, 8];
 	}
 
 	Steps(board) {
@@ -223,3 +223,53 @@ export class ShipFigure extends Figures {
 	}
 }
 
+
+export class HorseFigure extends Figures {
+	constructor(figure, color) {
+		super(figure, color);
+	}
+
+	Steps(board) {
+		const row = this.row;
+		const grow = this.grows.indexOf(this.grow);
+
+		if(row + 1 <= 8 && grow + 2 <= 7) {
+			getValidBoxes(this.grows[grow+2], row+1, this.steps, this.hitSteps, this.color);
+		}
+		if(row + 1 <= 8 && grow - 2 >= 0) {
+			getValidBoxes(this.grows[grow-2], row+1, this.steps, this.hitSteps, this.color);
+		}
+		if(row + 2 <= 8 && grow - 1 >= 0) {
+			getValidBoxes(this.grows[grow-1], row+2, this.steps, this.hitSteps, this.color);
+		}
+		if(row + 2 <= 8 && grow + 1 <= 7) {
+			getValidBoxes(this.grows[grow+1], row+2, this.steps, this.hitSteps, this.color);
+		}
+		if(row - 1 >= 1 && grow + 2 <= 7) {
+			getValidBoxes(this.grows[grow+2], row-1, this.steps, this.hitSteps, this.color);
+		}
+		if(row - 1 >= 1 && grow - 2 >= 0) {
+			getValidBoxes(this.grows[grow-2], row-1, this.steps, this.hitSteps, this.color);
+		}
+		if(row - 2 >= 1 && grow - 1 >= 0) {
+			getValidBoxes(this.grows[grow-1], row-2, this.steps, this.hitSteps, this.color);
+		}
+		if(row - 2 >= 1 && grow + 1 <= 7) {
+			getValidBoxes(this.grows[grow+1], row-2, this.steps, this.hitSteps, this.color);
+		}
+
+		function getValidBoxes(grow, row, validStaps, hitStaps, color) {
+			const box = board.querySelector(`#${grow}${row}`);
+			if(!box.querySelector('img')) {
+				validStaps.push(box);
+			} else {
+				if(!box.querySelector('img').classList.contains(color)) {
+					hitStaps.push(`${grow}${row}`);
+				}
+			}
+		}
+
+
+		return [this.steps, this.hitSteps];
+	}
+}
