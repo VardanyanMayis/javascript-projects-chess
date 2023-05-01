@@ -4,11 +4,14 @@
 class Figures {
 	constructor(figure, color) {
 		this.grows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-		this.steps = [];
-		this.hitSteps = [];
-		this.box = figure.parentElement;
 		this.figure = figure;
 		this.color = color;
+		this.box = figure.parentElement;
+		this.steps = [];
+
+		this.row = +this.box.id[1];
+		this.grow = this.box.id[0];
+		this.hitSteps = [];
 	}
 
 	showValidBoxes() {
@@ -87,9 +90,6 @@ export class SolderFigure extends Figures {
 	constructor(figure, color, changeFunction) {
 		super(figure, color);
 		this.changeFunction = changeFunction;
-
-		this.row = +this.box.id[1];
-		this.grow = this.box.id[0];
 		this.up = (this.color === 'with') ? 1 : -1;
 		this.canTwoStep = (this.color === 'with' && this.row === 2) 
 			? true : (this.color === 'black' && this.row === 7) ? true
@@ -158,3 +158,68 @@ export class SolderFigure extends Figures {
 	}
 
 }
+
+
+// Ship
+export class ShipFigure extends Figures {
+	constructor(figure, color) {
+		super(figure, color);
+		this.rows = [1, 2, 3, 4, 5, 6, 7, 8];
+	}
+
+	Steps(board) {
+		const prevRows = this.rows.slice(0, this.rows.indexOf(this.row)).reverse();
+		const nextRows = this.rows.slice(this.rows.indexOf(this.row) + 1);
+
+		const prevGrows = this.grows.slice(0, this.grows.indexOf(this.grow)).reverse();
+		const nextGrows = this.grows.slice(this.grows.indexOf(this.grow) + 1);
+
+		function getGrowSteps(arr, row, hitSteps, color) {
+			const steps = [];
+			for(let item of arr) {
+				const box = board.querySelector(`#${item}${row}`);
+				if(!box.querySelector('img')) {
+					steps.push(box);
+				} else {
+					if(!box.querySelector('img').classList.contains(color)) {
+						hitSteps.push(`${item}${row}`);
+					}
+					break;
+				}
+			}
+			return steps;
+		}
+
+		function getRowSteps(arr, grow, hitSteps, color) {
+			const steps = [];
+			for(let item of arr) {
+				const box = board.querySelector(`#${grow}${item}`);
+				if(!box.querySelector('img')) {
+					steps.push(box);
+				} else {
+					if(!box.querySelector('img').classList.contains(color)) {
+						hitSteps.push(`${grow}${item}`);
+					}
+					break;
+				}
+			}
+			return steps;
+		}
+
+		setValidSteps( getGrowSteps(prevGrows, this.row, this.hitSteps, this.color), 
+			this.steps);
+		setValidSteps( getGrowSteps(nextGrows, this.row, this.hitSteps, this.color),
+			this.steps);
+		setValidSteps( getRowSteps(prevRows, this.grow, this.hitSteps, this.color),
+			this.steps);
+		setValidSteps(getRowSteps(nextRows, this.grow, this.hitSteps, this.color),
+			this.steps);
+
+		function setValidSteps(arr, Steps) {
+			Steps.push(...arr);
+		}
+
+		return [this.steps, this.hitSteps];
+	}
+}
+

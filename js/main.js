@@ -3,7 +3,7 @@
 // import modules
 import {crateBoard, setBindFigures} from './board.js';
 import {ModalForNewFigure} from './solder_modal.js';
-import {SolderFigure} from './figures.js';
+import {SolderFigure, ShipFigure} from './figures.js';
 
 
 // set settings
@@ -34,6 +34,7 @@ function EventForBoard(event) {
 		if(currentFigure) {
 
 			validSteps = currentFigure.Steps(board);
+			console.log(validSteps);
 			getSteps = currentFigure.hitSteps;
 			if(validSteps != 0 || getSteps != 0) {
 				currentFigure.showValidBoxes();
@@ -89,8 +90,9 @@ function getFigureType(box) {
 	if(getSteps != 0) return;
 
 	if(figure === 'sol') {
-		const solder = new SolderFigure(box, whoStep, ModalForNewFigure);
-		return solder;
+		return new SolderFigure(box, whoStep, ModalForNewFigure);
+	} else if(figure === 'ship') {
+		return new ShipFigure(box, whoStep);
 	}
 }
 
