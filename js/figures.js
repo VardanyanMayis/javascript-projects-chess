@@ -273,3 +273,119 @@ export class HorseFigure extends Figures {
 		return [this.steps, this.hitSteps];
 	}
 }
+
+
+// Elephant
+export class ElephantFigure extends Figures {
+	constructor(figure, color) {
+		super(figure, color);
+	}
+
+	Steps(board) {
+		const prevGrows = this.grows.slice(0, this.grows.indexOf(this.grow)).reverse();
+		const nextGrows = this.grows.slice(this.grows.indexOf(this.grow) + 1);
+
+		function getGrowSteps(arr, row, way) {
+			const steps = [];
+			arr.forEach( (item, index) => {
+				let boxIndex = row + (++index * way);
+				if(boxIndex >= 1 &&  boxIndex <= 8) {
+					steps.push(`${item}${boxIndex}`);
+				}
+			});
+			return steps;
+		}
+
+		getValidSteps(getGrowSteps(prevGrows, this.row, 1),
+			this.steps, this.hitSteps, this.color);
+		getValidSteps(getGrowSteps(nextGrows, this.row, -1),
+			this.steps, this.hitSteps, this.color);
+		getValidSteps(getGrowSteps(prevGrows, this.row, -1),
+			this.steps, this.hitSteps, this.color);
+		getValidSteps(getGrowSteps(nextGrows, this.row, 1),
+			this.steps, this.hitSteps, this.color);
+
+		function getValidSteps(arr, steps, hits, color) {
+			for(let item of arr) {
+				console.log(item);
+				const box = board.querySelector(`#${item}`);
+				if(!box.querySelector('img')) {
+					steps.push(box);
+				} else {
+					if(!box.querySelector('img').classList.contains(color)) {
+						hits.push(item);
+					}
+					break;
+				}
+			}
+		}
+
+		return [this.steps, this.hitSteps];
+	}
+}
+
+
+// Quen
+export class QuinFigure extends Figures {
+	constructor(figure, color) {
+		super(figure, color);
+	}
+
+	Steps(board) {
+		const [likeShipSteps, likeShipHits] = new ShipFigure(
+			this.figure, this.color).Steps(board);
+		const [likeElSteps, likeElHits] = new ElephantFigure(
+			this.figure, this.color).Steps(board);
+
+		this.steps.push(...likeShipSteps);
+		this.steps.push(...likeElSteps);
+
+		this.hitSteps.push(...likeShipHits);
+		this.hitSteps.push(...likeElHits);
+		return [this.steps, this.hitSteps];
+
+	}
+}
+
+// King
+export class KingFigure extends Figures {
+	constructor(figure, color) {
+		super(figure, color);
+	}
+
+	Steps(board) {
+		const checkGrows = [];
+		checkGrows.push(this.grows.indexOf(this.grow));
+		checkGrows.push(this.grows.indexOf(this.grow)+1);
+		checkGrows.push(this.grows.indexOf(this.grow)-1);
+
+		getValidSteps(checkGrows, this.grows, this.row, this.steps,
+			this.hitSteps, this.color);
+		if( this.row + 1 != 9) {
+			getValidSteps(checkGrows, this.grows, this.row+1, this.steps,
+				this.hitSteps, this.color);
+		}
+		if( this.row - 1 != 0) {
+			getValidSteps(checkGrows, this.grows, this.row-1, this.steps,
+				this.hitSteps, this.color);
+		}
+		function getValidSteps(growIndexes, grows, row, steps, hits, color) {
+			for(let item of growIndexes) {
+				if(item >= 0 && item <= 7) {
+					console.log(`${grows[item]}${row}`);
+					const box = board.querySelector(`#${grows[item]}${row}`);
+					if(!box.querySelector('img')) {
+						steps.push(box);
+					} else {
+						if(!box.querySelector('img').classList.contains(color)) {
+							hits.push(`${grows[item]}${row}`);
+						}
+						continue;
+					}
+				}
+			}
+		}
+
+		return [this.steps, this.hitSteps];
+	}
+}
